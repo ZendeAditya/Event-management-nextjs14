@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import Credentials from "next-auth/providers/credentials";
 import { Awaitable, NextAuthOptions, RequestInternal, User } from "next-auth";
 export const options: NextAuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET as string,
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_ID as string,

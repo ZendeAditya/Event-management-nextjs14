@@ -1,9 +1,12 @@
+import { getServerSession } from "next-auth";
 import HomePage from "./components/HomePage";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession();
+
   return (
     <>
-      <HomePage />
+      <HomePage name={session?.user?.name} />
     </>
   );
 }

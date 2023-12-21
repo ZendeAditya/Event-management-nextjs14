@@ -1,10 +1,12 @@
-import Image from "next/image";
+"use client";
 import React from "react";
 import { MdEventAvailable } from "react-icons/md";
+import Image from "next/image";
 import { CiBookmark } from "react-icons/ci";
 import { BiCategory } from "react-icons/bi";
 import Link from "next/link";
-const Sidebar = () => {
+import { signIn, signOut, useSession } from "next-auth/react";
+const Sidebar = ({ name }: any) => {
   const Links = [
     {
       icon: <MdEventAvailable />,
@@ -22,23 +24,38 @@ const Sidebar = () => {
       href: "/category",
     },
   ];
+  const { data: session, status } = useSession();
+  console.log("session", status);
+  if (status === "loading") {
+    return <p>Plese wait!</p>;
+  }
   return (
     <div
       id="sideBar"
       className="w-80 border-2 border-white h-screen flex items-center flex-col justify-between p-4"
     >
       <div className="flex flex-col items-center gap-2">
-        <Image
-          src="https://pbs.twimg.com/profile_images/1604077005498384385/9rKVoKle_400x400.jpg"
-          alt="profile Photo"
-          width={70}
-          height={70}
-          className="rounded-full"
-        />
-        <p>Aditya Zende</p>
-        <Link href="/profile" className="text-sm border-2 px-6 py-2 rounded">
-          Edit Profile
-        </Link>
+        {session?.user?.email ? (
+          <>
+            <Image
+              src={session.user.image!}
+              alt="profile Photo"
+              width={70}
+              height={70}
+              className="rounded-full"
+            />
+            <p>{session.user.email}</p>
+            <p>{name}</p>
+            <Link
+              href="/profile"
+              className="text-sm border-2 px-6 py-2 rounded"
+            >
+              Edit Profile
+            </Link>
+          </>
+        ) : (
+          ""
+        )}
       </div>
       <div>
         <ul>
@@ -53,7 +70,17 @@ const Sidebar = () => {
           ))}
         </ul>
       </div>
-      <div>sign Out</div>
+      <div>
+        <>
+          {session?.user?.email ? (
+            <div>
+              <button onClick={signOut}>Sign Out</button>
+            </div>
+          ) : (
+            <button onClick={signIn}>Sign In</button>
+          )}
+        </>
+      </div>
     </div>
   );
 };
