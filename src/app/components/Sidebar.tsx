@@ -26,6 +26,7 @@ const Sidebar = ({ name }: any) => {
   ];
   const { data: session, status } = useSession();
   console.log("session", status);
+  console.log(session?.user?.image!);
   if (status === "loading") {
     return <p>Plese wait!</p>;
   }
@@ -37,13 +38,13 @@ const Sidebar = ({ name }: any) => {
       <div className="flex flex-col items-center gap-2">
         {session?.user?.email ? (
           <>
-            <Image
+            {/* <Image
               src={session.user.image!}
               alt="profile Photo"
               width={70}
               height={70}
               className="rounded-full"
-            />
+            /> */}
             <p>{session.user.email}</p>
             <p>{name}</p>
             <Link
