@@ -6,7 +6,9 @@ import { CiBookmark } from "react-icons/ci";
 import { BiCategory } from "react-icons/bi";
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 const Sidebar = ({ name }: any) => {
+  const route = useRouter();
   const Links = [
     {
       icon: <MdEventAvailable />,
@@ -26,7 +28,7 @@ const Sidebar = ({ name }: any) => {
   ];
   const { data: session, status } = useSession();
   console.log("session", status);
-  console.log(session?.user?.image!);
+  // console.log(session?.user?.image!);
   if (status === "loading") {
     return <p>Plese wait!</p>;
   }
@@ -38,13 +40,13 @@ const Sidebar = ({ name }: any) => {
       <div className="flex flex-col items-center gap-2">
         {session?.user?.email ? (
           <>
-            {/* <Image
+            <Image
               src={session.user.image!}
               alt="profile Photo"
               width={70}
               height={70}
               className="rounded-full"
-            /> */}
+            />
             <p>{session.user.email}</p>
             <p>{name}</p>
             <Link
@@ -55,7 +57,14 @@ const Sidebar = ({ name }: any) => {
             </Link>
           </>
         ) : (
-          ""
+          <div className="p-2 flex flex-col gap-2 [&_button]:border-2 [&_button]:py-2 [&_button]:px-5 [&_button]:rounded-md">
+            <Link href={"/signup"}>
+              <button>Sign Up</button>
+            </Link>
+            <Link href={"/login"}>
+              <button>Log In</button>
+            </Link>
+          </div>
         )}
       </div>
       <div>
@@ -78,7 +87,7 @@ const Sidebar = ({ name }: any) => {
               <button onClick={signOut}>Sign Out</button>
             </div>
           ) : (
-            <button onClick={signIn}>Sign In</button>
+            <button onClick={signIn}>Log In</button>
           )}
         </>
       </div>

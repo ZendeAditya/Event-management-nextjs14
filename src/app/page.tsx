@@ -1,12 +1,16 @@
 import { getServerSession } from "next-auth";
-import HomePage from "./components/HomePage";
+import Sidebar from "./components/Sidebar";
+import EventBox from "./components/EventBox";
 
 export default async function Home() {
   const session = await getServerSession();
 
   return (
     <>
-      <HomePage name={session?.user?.name} />
+      <main className="flex items-center justify-between gap-3">
+        <Sidebar />
+        <EventBox />
+      </main>
     </>
   );
 }

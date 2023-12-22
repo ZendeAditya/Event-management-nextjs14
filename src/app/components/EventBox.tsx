@@ -1,9 +1,11 @@
-import React from 'react'
+import React from "react";
 
-const EventBox = () => {
+const EventBox = ({ content }: any) => {
   return (
-    <div className='h-screen w-full border-2 border-white'>EventBox</div>
-  )
-}
+    <div className="h-screen w-full border-2 border-white">
+      EventBox {content}
+    </div>
+  );
+};
 
 export default EventBox;
