@@ -1,6 +1,6 @@
 "use client";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import React, { useState } from "react";
 import toast from "react-hot-toast";
@@ -9,20 +9,23 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/profile";
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
       const res = await signIn("credentials", {
-        redirect: false,
+        redirect: true,
         email,
         password,
+        callbackUrl,
       });
-      console.log(res);
       if (res?.error) {
         toast.error("Invalide email or password");
       } else {
-        router.push(res?.url);
+        router.push("/profile");
       }
+      router.push("/");
     } catch (error) {
       console.log(error);
       toast.error("An error occured during login");
@@ -71,6 +74,7 @@ const LoginPage = () => {
         </div>
         <div>
           <input
+            onClick={() => signIn("credentials")}
             type="submit"
             value="Log In"
             className="px-10 rounded-md bg-green-400 cursor-pointer"

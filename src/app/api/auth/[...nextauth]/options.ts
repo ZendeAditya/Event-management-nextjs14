@@ -9,6 +9,7 @@ import bcrypt from "bcrypt";
 import User from "@/app/models/user";
 import { randomBytes, randomUUID } from "crypto";
 import connectDB from "@/app/helper/connectDB";
+import { use } from "react";
 export const options: NextAuthOptions = {
   adapter: MongoDBAdapter(clientPromise!),
   secret: process.env.NEXTAUTH_SECRET as string,
@@ -24,7 +25,6 @@ export const options: NextAuthOptions = {
     CredentialsProvider({
       name: "Sign In",
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "Your name" },
         email: {
           label: "Email",
           type: "email",
@@ -37,30 +37,24 @@ export const options: NextAuthOptions = {
         },
       },
       async authorize(credentials, req) {
-        async function authorize(credentials, req) {
-          try {
-            const email = credentials?.email ?? "";
-            const password = credentials?.password ?? "";
+        try {
+          const email = credentials?.email;
+          const password = credentials?.password;
+          await connectDB();
+          const user = await User.findOne({ email });
+          if (user) {
+            const isPasswordValid = await bcrypt.compare(
+              password,
+              user.password
+            );
 
-            await connectDB();
-
-            const user = await User.findOne({ email });
-
-            if (user) {
-              const isPasswordValid = await bcrypt.compare(
-                password,
-                user.password
-              );
-
-              if (isPasswordValid) {
-                return user;
-              }
+            if (isPasswordValid) {
+              return user;
             }
-            return null;
-          } catch (error) {
-            console.error("Authentication error:", error);
-            return null;
           }
+          return null;
+        } catch (error) {
+          console.log(error);
         }
       },
     }),
@@ -77,7 +71,6 @@ export const options: NextAuthOptions = {
     maxAge: 60 * 60 * 24 * 30,
   },
   pages: {
-    signIn: "/signin",
-    signOut: "/signout",
+    signIn: "/login",
   },
 };

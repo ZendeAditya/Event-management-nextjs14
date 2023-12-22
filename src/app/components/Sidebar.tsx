@@ -41,7 +41,10 @@ const Sidebar = ({ name }: any) => {
         {session?.user?.email ? (
           <>
             <Image
-              src={session.user.image!}
+              src={
+                session.user.image! ||
+                "https://surgassociates.com/wp-content/uploads/610-6104451_image-placeholder-png-user-profile-placeholder-image-png-286x300.jpg"
+              }
               alt="profile Photo"
               width={70}
               height={70}
@@ -84,10 +87,16 @@ const Sidebar = ({ name }: any) => {
         <>
           {session?.user?.email ? (
             <div>
-              <button onClick={signOut}>Sign Out</button>
+              <button onClick={() => signOut()}>Sign Out</button>
             </div>
           ) : (
-            <button onClick={signIn}>Log In</button>
+            <button
+              onClick={() => {
+                route.push("/login");
+              }}
+            >
+              Log In
+            </button>
           )}
         </>
       </div>
