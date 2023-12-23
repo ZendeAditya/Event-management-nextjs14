@@ -24,7 +24,6 @@ const SignUpPage = () => {
         "Content-Type": "application/json",
       },
     });
-    console.log("inside fetch");
     if (res.ok) {
       let form = e.target;
       form.reset();

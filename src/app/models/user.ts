@@ -1,6 +1,11 @@
 import mongoose, { Schema } from "mongoose";
+import { userInfo } from "os";
 const userSchema = new Schema(
   {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "userInfo",
+    },
     username: {
       type: String,
       unique: true,

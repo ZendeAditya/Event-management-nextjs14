@@ -51,6 +51,7 @@ const Sidebar = ({ name }: any) => {
               className="rounded-full"
             />
             <p>{session.user.email}</p>
+            <p>{session.id}</p>
             <p>{name}</p>
             <Link
               href="/profile"
